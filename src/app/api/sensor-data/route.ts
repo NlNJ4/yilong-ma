@@ -1,26 +1,53 @@
 import { NextResponse } from 'next/server';
 
-// Mock sensor data generator
-function generateSensorData() {
-  const data = [];
-  const now = new Date();
-  
-  // Generate last 10 readings
-  for (let i = 9; i >= 0; i--) {
-    const timestamp = new Date(now.getTime() - i * 500); // 500ms intervals
-    data.push({
-      timestamp: timestamp.toISOString(),
-      temperature: (23 + Math.random() * 3).toFixed(2),
-      water: Math.random() > 0.7 ? 'Wet' : 'Dry',
-      light: Math.floor(3000 + Math.random() * 1095),
-      isflame: Math.random() > 0.9 ? 'TRUE' : 'FALSE'
-    });
-  }
-  
-  return data;
+interface SensorData {
+  timestamp: string;
+  temperature: string | number;
+  water: string;
+  light: number;
+  isflame: string;
 }
 
+// หมายเหตุ: การเก็บข้อมูลในตัวแปร global แบบนี้ใน Vercel (Serverless) 
+// ข้อมูลอาจจะหายไปเมื่อ Server มีการ Restart หรือ Cold Start
+// แนะนำให้ใช้ Database จริงๆ เช่น MongoDB, PostgreSQL หรือ Firebase ในการใช้งานจริง
+let sensorDataStore: SensorData[] = [];
+
 export async function GET() {
-  const data = generateSensorData();
-  return NextResponse.json(data);
+  return NextResponse.json(sensorDataStore);
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    
+    // รับข้อมูลจาก Raspberry Pi
+    // คาดหวังข้อมูลรูปแบบ:
+    // {
+    //   "timestamp": "2025-12-05T18:29:21.303439+00:00",
+    //   "temperature": 24.56,
+    //   "water": "Dry",
+    //   "light": 4095,
+    //   "isflame": "FALSE"
+    // }
+
+    const newData: SensorData = {
+      timestamp: body.timestamp || new Date().toISOString(),
+      temperature: body.temperature.toString(),
+      water: body.water,
+      light: Number(body.light),
+      isflame: body.isflame.toString()
+    };
+
+    // เก็บข้อมูลลงใน Array (เก็บไว้สูงสุด 50 ค่าล่าสุด)
+    sensorDataStore.push(newData);
+    if (sensorDataStore.length > 50) {
+      sensorDataStore.shift();
+    }
+
+    return NextResponse.json({ success: true, message: 'Data received', data: newData });
+  } catch (error) {
+    console.error('Error processing sensor data:', error);
+    return NextResponse.json({ success: false, error: 'Invalid data format' }, { status: 400 });
+  }
 }
