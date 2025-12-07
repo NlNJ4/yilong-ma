@@ -11,7 +11,7 @@ interface SensorData {
 // หมายเหตุ: การเก็บข้อมูลในตัวแปร global แบบนี้ใน Vercel (Serverless) 
 // ข้อมูลอาจจะหายไปเมื่อ Server มีการ Restart หรือ Cold Start
 // แนะนำให้ใช้ Database จริงๆ เช่น MongoDB, PostgreSQL หรือ Firebase ในการใช้งานจริง
-let sensorDataStore: SensorData[] = [];
+const sensorDataStore: SensorData[] = [];
 
 export async function GET() {
   return NextResponse.json(sensorDataStore);
