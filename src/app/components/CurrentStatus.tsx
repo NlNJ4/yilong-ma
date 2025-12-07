@@ -45,8 +45,30 @@ export default function CurrentStatus() {
 
   if (!currentData) {
     return (
-      <div className="text-center text-red-500 text-xl p-8">
-        ไม่สามารถเชื่อมต่อกับเซ็นเซอร์ได้
+      <div className="flex flex-col items-center justify-center min-h-[400px] p-8 bg-gray-100 dark:bg-gray-800 rounded-3xl shadow-inner border-2 border-dashed border-gray-300 dark:border-gray-700">
+        <div className="relative mb-8">
+          <div className="absolute inset-0 bg-red-500 rounded-full opacity-20 animate-ping"></div>
+          <div className="relative bg-white dark:bg-gray-700 p-8 rounded-full shadow-xl">
+            <span className="text-6xl grayscale opacity-50">📡</span>
+          </div>
+          <div className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg animate-bounce">
+            OFFLINE
+          </div>
+        </div>
+        <h2 className="text-3xl font-bold text-gray-700 dark:text-gray-200 mb-3">
+          ไม่พบสัญญาณจากอุปกรณ์
+        </h2>
+        <p className="text-gray-500 dark:text-gray-400 text-center max-w-md mb-8 text-lg">
+          กำลังรอรับข้อมูลจาก Raspberry Pi... <br/>
+          <span className="text-sm opacity-75">กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ตหรือสถานะของอุปกรณ์</span>
+        </p>
+        <div className="flex gap-3 items-center text-sm font-medium text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 px-6 py-3 rounded-full shadow-sm border border-gray-200 dark:border-gray-700">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-yellow-500"></span>
+          </span>
+          กำลังพยายามเชื่อมต่อใหม่...
+        </div>
       </div>
     );
   }
