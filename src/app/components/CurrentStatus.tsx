@@ -113,7 +113,7 @@ export default function CurrentStatus() {
         </div>
         <div className="text-center py-4">
           <span className="text-6xl font-bold">
-            {currentData.water === 'Wet' ? 'ตรวจพบน้ำ' : 'แห้งปกติ'}
+            {currentData.water === 'Wet' ? 'มีน้ำเพียงพอ' : 'มีน้ำไม่เพียงพอ'}
           </span>
         </div>
         <div className="mt-4 text-center bg-black/10 rounded-lg py-2">

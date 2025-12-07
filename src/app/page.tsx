@@ -10,7 +10,7 @@ export default function Home() {
             <div>
               <h1 className="text-4xl md:text-5xl font-bold mb-2 flex items-center gap-4">
                 <span className="text-5xl">🚀</span>
-                Embedding Project
+                Realtime Monitoring
               </h1>
               <p className="text-blue-100 text-lg">ระบบติดตามสถานะเซ็นเซอร์แบบเรียลไทม์</p>
             </div>
